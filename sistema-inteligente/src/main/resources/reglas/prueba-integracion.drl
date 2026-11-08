@@ -1,0 +1,15 @@
+package reglas
+
+// PRUEBA DE INTEGRACION (temporal).
+// Solo comprueba que Drools 7.74.1 carga y ejecuta reglas en este proyecto.
+// Se borrara cuando empecemos las reglas reales de la fase 1.b.
+
+global java.util.List registro;
+
+rule "Prueba de integracion: Drools funciona"
+    when
+        $s : String( this == "ping" )
+    then
+        registro.add("pong");
+        System.out.println("Drools 7.74.1 funcionando: regla de prueba ejecutada");
+end
