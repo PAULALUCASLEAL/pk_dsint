@@ -25,3 +25,15 @@ drools-distribution-*/
 # Secretos
 *.env
 .env*
+
+# Skills de Claude Code descargadas de terceros (se reinstalan: ver documentacion/GUIA_SKILLS_DSINT.md)
+.claude/skills/java-development/
+.claude/skills/java-debugging/
+.claude/skills/refactor/
+.claude/skills/test-driven-development/
+.claude/skills/systematic-debugging/
+.claude/skills/verification-before-completion/
+.claude/skills/writing-plans/
+.claude/skills/architecture-designer/
+.claude/skills/code-reviewer/
+.claude/skills/test-master/
