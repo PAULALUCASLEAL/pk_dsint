@@ -16,35 +16,47 @@ Las skills viven en `pk_dsint/.claude/skills/`. Claude Code las detecta cuando s
 | `drools-7-expert` | DRL, KIE API, TMS, agendas, pruebas, Drools 7.74.1 | docs.drools.org 7.74.1.Final, download.jboss.org | `.claude/skills/drools-7-expert/SKILL.md` | Creada; frontmatter valido |
 | `knowledge-engineering` | Extraer reglas de los mitos, origen texto/supuesto, validacion | Enunciado DSINT §8-11, CommonKADS (referencia) | `.claude/skills/knowledge-engineering/SKILL.md` | Creada; frontmatter valido |
 
-Las cuatro se escribieron a partir de documentacion publica conocida y del enunciado; **no se han
-descargado** de ningun repositorio. Las URL de referencia **no se han podido abrir hoy** (ver 1.2),
-asi que conviene revisarlas cuando haya conexion.
+Las cuatro se escribieron a partir de documentacion publica y del enunciado; **no se han descargado**.
 
-### Skills de terceros solicitadas: NO instaladas
+### Skills de terceros: descargadas, revisadas e instaladas
 
-El 8-nov-2026 el ordenador no tenia conexion a Internet durante la sesion (`Could not resolve host:
-github.com`; tambien fallaban `docs.google.com` y la descarga de paquetes). Por eso **no se ha
-descargado, revisado ni instalado** ninguna skill de terceros. No se afirma nada sobre su contenido actual.
+Al principio de la sesion no habia conexion; despues volvio y se clonaron los repositorios con
+`git clone --depth 1` en una carpeta temporal. Se leyo cada `SKILL.md` y se listaron sus ficheros antes de
+copiarlos. **No se ha ejecutado nada de terceros** (ni `npx skills`, ni `/plugin`, ni scripts).
+Solo se han copiado ficheros `.md`.
 
-| Repositorio | Skills pedidas | Estado | Como instalarlas cuando haya red |
-|---|---|---|---|
-| https://github.com/github/awesome-copilot | `java-development`, `java-debugging`, `refactor` | Pendiente (sin red) | Clonar, **leer** cada `SKILL.md` y copiarlo a `.claude/skills/<nombre>/`. Alternativa: `npx -y skills add github/awesome-copilot --skill <nombre> --agent claude-code` (ejecuta un paquete npm de terceros: revisarlo antes) |
-| https://github.com/Jeffallan/claude-skills | arquitectura, POO, revision de codigo, pruebas | Pendiente (sin red) | Desde una terminal `claude`: `/plugin marketplace add jeffallan/claude-skills`; o copiar solo las skills pertinentes |
-| https://github.com/obra/superpowers | `test-driven-development`, `systematic-debugging`, `verification-before-completion`, `writing-plans` | Pendiente (sin red) | Seguir su README actual (normalmente via `/plugin`) |
-| https://github.com/anthropics/skills | `skill-creator` | **Ya disponible** en Claude Code como `anthropic-skills:skill-creator` (no hace falta copiarla) | — |
+| Skill | Repositorio (commit revisado) | Licencia | Ubicacion | Estado / observaciones |
+|---|---|---|---|---|
+| `java-development` | https://github.com/github/awesome-copilot (`797337f`, 7-nov-2026) | MIT | `.claude/skills/java-development/` | Instalada. Elige idiomas segun la version de Java del `pom.xml` y prohibe subirla: compatible con Java 8 |
+| `java-debugging` | github/awesome-copilot (`797337f`) | MIT | `.claude/skills/java-debugging/` | Instalada. Partes de Spring Boot/Quarkus no aplican |
+| `refactor` | github/awesome-copilot (`797337f`) | MIT | `.claude/skills/refactor/` | Instalada. Ejemplos en varios lenguajes: aplicar solo idiomas de Java 8 |
+| `test-driven-development` | https://github.com/obra/superpowers (`22f0b46`, 3-nov-2026) | MIT | `.claude/skills/test-driven-development/` | Instalada. Ejemplos con `npm test`: aqui equivale a `mvn test` |
+| `systematic-debugging` | obra/superpowers (`22f0b46`) | MIT | `.claude/skills/systematic-debugging/` | Instalada sin `find-polluter.sh` (script que llama a `npm test`; revisado, inofensivo, pero no aplica) ni el ejemplo `.ts` |
+| `verification-before-completion` | obra/superpowers (`22f0b46`) | MIT | `.claude/skills/verification-before-completion/` | Instalada |
+| `writing-plans` | obra/superpowers (`22f0b46`) | MIT | `.claude/skills/writing-plans/` | Instalada |
+| `architecture-designer` | https://github.com/Jeffallan/claude-skills (`078a25c`, 30-oct-2026) | MIT | `.claude/skills/architecture-designer/` | Instalada. Orientada a sistemas distribuidos: usar solo para decisiones y ADR |
+| `code-reviewer` | Jeffallan/claude-skills (`078a25c`) | MIT | `.claude/skills/code-reviewer/` | Instalada |
+| `test-master` | Jeffallan/claude-skills (`078a25c`) | MIT | `.claude/skills/test-master/` | Instalada |
+| `skill-creator` | https://github.com/anthropics/skills | Apache 2.0 | — | **Ya disponible** en Claude Code como `anthropic-skills:skill-creator`; no se copia |
 
-Al instalarlas, comprobar que sus ejemplos no usan Java > 8 (`var`, `record`, `List.of`, `switch` con
-flechas, text blocks) y no recomiendan Drools 8+.
+No se instalo el plugin completo de Jeffallan (mas de 60 skills, casi todas de otras tecnologias) ni
+`java-architect`/`spring-boot-engineer` (enfocadas a Spring).
+
+**Las skills de terceros no se suben al repositorio** (`.gitignore`): son contenido descargado. Para
+reinstalarlas, clonar los repositorios en esos commits y copiar las carpetas indicadas a `.claude/skills/`.
+Solo se versionan las cuatro skills propias.
 
 ## 2. Para que sirve cada skill en el proyecto
 
 | Tarea | Skills |
 |---|---|
 | Inventario y revision de `mitologia.owl` | `owl-ontology-expert` |
-| Diseno de clases Java (fase 1.b) | `owl-java-mapping` (+ `java-development`/`refactor` cuando se instalen) |
+| Diseno de clases Java (fase 1.b) | `owl-java-mapping`, `java-development`, `refactor`, `architecture-designer` |
 | Extraccion de reglas del mito y revision del catalogo de 48 reglas | `knowledge-engineering` |
 | Implementacion de `.drl`, sesiones y agendas | `drools-7-expert` |
-| Pruebas y depuracion | `drools-7-expert` (+ `systematic-debugging`, `test-driven-development` cuando se instalen) |
+| Pruebas y depuracion | `drools-7-expert`, `test-driven-development`, `test-master`, `systematic-debugging`, `java-debugging` |
+| Revision antes de entregar | `code-reviewer`, `verification-before-completion` |
+| Planificacion de tareas largas | `writing-plans` |
 
 ## 3. Como se comprobara que el codigo respeta la ontologia
 
@@ -78,8 +90,9 @@ flechas, text blocks) y no recomiendan Drools 8+.
 ## 6. Comprobaciones realizadas
 
 - Los cuatro `SKILL.md` existen y tienen frontmatter `name` / `description`.
-- No hay contradicciones entre ellas: todas fijan Java 8 y Drools 7.74.1, y la regla de que Java no infiere.
+- Las propias fijan Java 8, Drools 7.74.1 y que Java no infiere. Posible conflicto con las de terceros: ejemplos con Java moderno o `npm`; manda la version del `pom.xml` (lo dice la propia `java-development`).
+- Sin duplicados: ninguna skill instalada repite otra.
 - No se ha tocado `ontologia/mitologia.owl` ni el codigo Java en esta rama.
-- No se ha ejecutado ningun script de terceros.
+- No se ha ejecutado ningun script de terceros; el catalogo de 48 reglas (Google Drive) es privado (HTTP 401) y no se ha podido leer.
 - Que Claude Code las reconozca se comprueba abriendo una sesion en `pk_dsint` y pidiendo «lista tus
   skills»; no se ha podido comprobar desde esta sesion porque se abrio en la carpeta superior.
