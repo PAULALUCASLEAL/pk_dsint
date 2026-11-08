@@ -1,0 +1,33 @@
+package dsi.mitologia.pruebas
+
+// SOLO PARA PRUEBAS TECNICAS del modelo Java (no son reglas del mito).
+// Se compila desde los tests con KieHelper; no forma parte de la KieBase principal.
+
+import dsi.mitologia.modelo.Personaje
+import dsi.mitologia.hechos.Posesion
+import dsi.mitologia.hechos.ProporcionaCapacidad
+import dsi.mitologia.hechos.CapacidadDisponible
+import dsi.mitologia.eventos.EventoMitologico
+import dsi.mitologia.eventos.TipoAccion
+import dsi.mitologia.modelo.enums.EstadoVital
+
+global dsi.mitologia.eventos.RegistroEventos registro
+
+// Prueba 12: Drools reconoce los hechos del modelo (Personaje con varios tipos + Posesion)
+rule "Prueba tecnica: heroe vivo que posee un objeto"
+when
+    $p   : Personaje(heroe, semidios, estadoVital == EstadoVital.VIVO)
+    $pos : Posesion(poseedor == $p, $o : objeto)
+then
+    registro.registrar(EventoMitologico.nuevo(TipoAccion.INFORMACION, $p)
+        .objeto($o).justificacion("prueba tecnica").regla(drools.getRule().getName()));
+end
+
+// Mantenimiento de la verdad: la capacidad existe mientras exista la posesion que la justifica
+rule "Prueba tecnica: capacidad por objeto (insertLogical)"
+when
+    $pos : Posesion($p : poseedor, $o : objeto)
+           ProporcionaCapacidad(objeto == $o, $c : capacidad)
+then
+    insertLogical(CapacidadDisponible.deObjeto($p, $c, $o));
+end

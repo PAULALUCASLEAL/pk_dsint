@@ -113,6 +113,7 @@ Debe salir `Drools 7.74.1 funcionando: regla de prueba ejecutada` y `Tests run: 
 - [x] Ontología fase 1.a incluida (`ontologia/mitologia.owl`, sin cambios).
 - [x] Drools 7.74.1 + Java 8 probados: `drools-prueba` imprime `Hello World` / `Goodbye cruel world`.
 - [x] `sistema-inteligente` compila con Java 8 y pasa la prueba de integración.
+- [x] Modelo Java de hechos (paquetes `modelo`, `hechos`, `eventos`, `escenario`, `ontologia`, `motor`) con 26 pruebas JUnit — ver `documentacion/MODELO_JAVA.md`.
 - [ ] Reglas del mito de Perseo y Andrómeda (fase 1.b) — **no empezadas**.
 
 ## Próximos pasos (fase 1.b)
