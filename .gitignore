@@ -1,0 +1,27 @@
+# Compilados y salidas de Maven / Eclipse
+target/
+bin/
+*.class
+
+# Metadatos de Eclipse del proyecto Maven (Eclipse los regenera al importar)
+sistema-inteligente/.project
+sistema-inteligente/.classpath
+sistema-inteligente/.settings/
+.metadata/
+.recommenders/
+
+# Salidas generadas por el sistema
+soluciones/
+
+# Software instalado: nunca al repositorio
+eclipse/
+*.dmg
+drools-distribution-*/
+*.zip
+
+# Sistema operativo
+.DS_Store
+
+# Secretos
+*.env
+.env*
