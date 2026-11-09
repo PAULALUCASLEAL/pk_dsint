@@ -11,7 +11,7 @@ Sigue el documento del profesor **«Instalar Drools.pdf»**; donde nos apartamos
 | **Drools Runtime** (`drools-distribution-7.74.1.Final.zip`) | Los jars del motor. Eclipse los añade al proyecto como «Drools Library». |
 | **Plugin de Drools para Eclipse** (7.46) | Añade a Eclipse el asistente «Drools Project», el editor de `.drl` con colores y la vista *Outline* de reglas. No es el motor: el motor es el runtime. |
 | **Java 8** | La versión de Java con la que compilamos y ejecutamos el proyecto (`compliance 1.8`). |
-| **Maven** | Descarga las librerías declaradas en `pom.xml`. Lo usa `sistema-inteligente`; `drools-prueba` usa el runtime de Eclipse. Son dos formas distintas de conseguir Drools y no se mezclan en un mismo proyecto. |
+| **Maven** | Descarga las librerías declaradas en `pom.xml`. Lo usa `sistema-inteligente`. El runtime de Eclipse es otra forma de conseguir Drools (la usan los proyectos Drools «clásicos»); no se mezclan en un mismo proyecto. |
 
 ## 1. Comprobaciones previas del ordenador (resultados reales, 8-nov-2026)
 
@@ -103,45 +103,28 @@ Next → acepta la licencia → Finish → «Install anyway» → **Restart Now*
    Vuelve a entrar para comprobar que sigue marcado: a veces se desmarca (diapositiva 24).
 
 Esto es distinto de declarar dependencias en Maven: aquí le dices a Eclipse dónde están los jars
-para los proyectos Drools «clásicos» como `drools-prueba`.
+para los proyectos Drools «clásicos», como el de prueba del apartado 6.
 
-## 6. Proyecto de prueba `drools-prueba`
+## 6. Prueba con el proyecto de ejemplo del profesor (`drools-prueba`)
 
-### Qué contiene
+Para comprobar la instalación se usó el proyecto de ejemplo del asistente del plugin
+(File → New → Project → Drools → Drools Project → «Create a project and populate it with some example files»
+→ nombre `drools-prueba` → solo «Add a sample HelloWorld rule file»): una clase `DroolsTest.java`,
+un `Sample.drl` con las reglas «Hello World» y «GoodBye», y un `kmodule.xml`.
 
-Los mismos ficheros que genera el asistente del plugin (File → New → Project → Drools → Drools Project →
-«Create a project and populate it with some example files» → nombre `drools-prueba` →
-solo «Add a sample HelloWorld rule file»):
-
-| Fichero | Para qué |
-|---|---|
-| `src/main/java/com/sample/DroolsTest.java` | Crea la sesión, inserta un `Message("Hello World")` y dispara las reglas |
-| `src/main/resources/com/sample/rules/Sample.drl` | Dos reglas: «Hello World» imprime y cambia el mensaje; «GoodBye» imprime el nuevo |
-| `src/main/resources/META-INF/kmodule.xml` | Declara la base de conocimiento `rules` y la sesión `ksession-rules` |
-| `src/main/resources/META-INF/maven/pom.properties` | Identificador del módulo (`com.sample:drools-prueba:1.0.0-SNAPSHOT`) |
-| `src/main/resources/logback-test.xml` | Lo genera el asistente; con slf4j-simple no se usa |
-| `.project`, `.classpath`, `.settings/` | Proyecto Eclipse Java con el builder de Drools (`org.drools.eclipse.droolsbuilder`), «Drools Library» (`DROOLS/Drools`, el contenedor que define el plugin 7.46), compliance 1.8 y UTF-8 |
-| `lib/slf4j-simple-1.7.26.jar` | Proveedor de logging (diapositivas 22-23) |
-
-**Por qué está ya creado en el repositorio:** así cualquier compañero lo importa y ejecuta sin repetir el asistente.
-Si prefieres generarlo tú con el asistente para practicar, cuando salga «Marketplace solutions available» pulsa **Cancel**,
-y si sale «Error occurring during the build», pulsa OK.
-
-### Importarlo y ejecutarlo en Eclipse
-
-1. File → Import → General → Existing Projects into Workspace → Browse → `pk_dsint/drools-prueba` → Finish.
-2. Comprueba Project → Properties → Java Compiler: «Enable project specific settings» marcado y compliance **1.8**.
-3. Abre `Sample.drl`: deben verse las reglas «Hello World» y «GoodBye» (y en *Outline*, ambas reglas).
-4. Botón derecho en `DroolsTest.java` → Run As → Java Application.
-
-Salida esperada:
+Se ejecutó en Eclipse 2020-12 (DroolsTest → Run As → Java Application) el 9-nov-2026 con este resultado:
 
 ```text
+[main] INFO ... Found kmodule: file:/…/drools-prueba/target/classes/META-INF/kmodule.xml
 [main] INFO ... Start creation of KieBase: rules
 [main] INFO ... End creation of KieBase: rules
 Hello World
 Goodbye cruel world
 ```
+
+Superada la prueba, **el proyecto se retiró del repositorio** para dejar solo nuestro trabajo.
+Si hace falta repetirla, está en el historial de Git: `git checkout c18f0e3 -- drools-prueba`,
+o se vuelve a generar con el asistente (cuando salga «Marketplace solutions available», pulsa **Cancel**).
 
 ## 7. Logging (SLF4J)
 
@@ -149,7 +132,7 @@ Goodbye cruel world
   No impiden ejecutar, pero ocultan errores de carga de reglas.
 - El PDF dice que `slf4j-simple-1.7.26.jar` está en la distribución de Drools. **En la 7.74.1 no está**
   (solo viene `slf4j-api-1.7.30.jar`). Se ha usado el mismo jar 1.7.26 de Maven Central
-  (compatible con la API 1.7.30), guardado en `drools-prueba/lib/` y referenciado en `.classpath` con ruta relativa.
+  (compatible con la API 1.7.30) para la prueba del apartado 6.
 - En `sistema-inteligente` se declara la dependencia Maven `org.slf4j:slf4j-simple:1.7.26`.
 - Solo hay un proveedor en cada proyecto (no se añade logback ni log4j).
 
@@ -161,32 +144,24 @@ Goodbye cruel world
   No hay reglas mitológicas todavía.
 - En Eclipse: File → Import → Maven → Existing Maven Projects → `pk_dsint/sistema-inteligente`.
 
-## 9. Pruebas realizadas (8-nov-2026)
+## 9. Pruebas realizadas (8 y 9-nov-2026)
 
 | # | Prueba | Cómo | Resultado |
 |---|---|---|---|
 | 1 | Java funciona | `java -version` / `$(/usr/libexec/java_home -v 1.8)/bin/java -version` | OK: Temurin 25 por defecto; Zulu 1.8.0_512 arm64 para el proyecto |
 | 2 | Maven funciona con Java 8 | `JAVA_HOME=…zulu-8… mvn -v` | OK: Maven 3.9.11, «Java version: 1.8.0_512» |
-| 3 | Eclipse reconoce los proyectos | Importar en Eclipse 2020-12 | **PENDIENTE** (paso gráfico, lo hace el usuario) |
-| 4 | Drools 7.74.1 configurado | Plugin: `p2.director -listInstalledRoots`. Runtime: Settings → Drools | Plugin OK: `org.drools.eclipse.feature` y `.source` 7.46.0.Final. Runtime en Eclipse: **PENDIENTE** (paso gráfico). Distribución 7.74.1 descomprimida y verificada (`unzip -t` sin errores) |
+| 3 | Eclipse reconoce los proyectos | Importar en Eclipse 2020-12 | OK: `drools-prueba` importado y compilado por Eclipse. `sistema-inteligente`: se importa como proyecto Maven |
+| 4 | Drools 7.74.1 configurado | Plugin: `p2.director -listInstalledRoots`. Runtime: Settings → Drools | Plugin OK: `org.drools.eclipse.feature` y `.source` 7.46.0.Final. Runtime en Eclipse: OK, «Drools 7.74.1.202307131542» marcado como predeterminado. Distribución 7.74.1 descomprimida y verificada (`unzip -t` sin errores) |
 | 5 | `Sample.drl` se carga | Log de Drools al ejecutar | OK: «Found kmodule … drools-prueba», «Start/End creation of KieBase: rules» |
-| 6 | `DroolsTest` ejecuta las reglas | `javac`/`java` 1.8 con `binaries/*` (los mismos jars que la «Drools Library» de Eclipse) | OK: imprime `Hello World` y `Goodbye cruel world`. En Eclipse: **PENDIENTE** de que lo lance el usuario |
+| 6 | `DroolsTest` ejecuta las reglas | `javac`/`java` 1.8 con `binaries/*` (los mismos jars que la «Drools Library» de Eclipse) | OK: imprime `Hello World` y `Goodbye cruel world`. En Eclipse (9-nov): OK, misma salida |
 | 7 | Compilación Java 8 | `javap -v` sobre las clases | OK: `major version: 52` (Java 8) |
 | 8 | Sin errores que impidan ejecutar | `mvn test exec:java` en `sistema-inteligente` | OK: `Tests run: 1, Failures: 0, Errors: 0`, `BUILD SUCCESS`, «Drools 7.74.1 funcionando» |
-| 9 | Git reconoce los archivos | `git status` | OK: 20 ficheros, sin `target/` ni software |
-| 10 | Subido a `pk_dsint` | `git push` + comprobación con `git ls-remote` | Ver el estado en el README / la pull request |
+| 9 | Git reconoce los archivos | `git status` | OK: sin `target/` ni software |
+| 10 | Subido a `pk_dsint` | `git push` + comprobación con `git ls-remote` | OK: ramas en `origin` |
 
-Comandos para repetir las pruebas 6 y 8 desde terminal:
+Comando para repetir la prueba 8 desde terminal (en `pk_dsint/sistema-inteligente`):
 
 ```bash
-# drools-prueba (sin Eclipse), desde pk_dsint/drools-prueba
-J=$(/usr/libexec/java_home -v 1.8)/bin
-BIN=~/DSINT/software/drools-distribution-7.74.1.Final/binaries
-mkdir -p /tmp/dp && $J/javac -source 1.8 -target 1.8 -cp "$BIN/*" -d /tmp/dp src/main/java/com/sample/DroolsTest.java
-cp -R src/main/resources/. /tmp/dp/
-$J/java -cp "/tmp/dp:$BIN/*:lib/slf4j-simple-1.7.26.jar" com.sample.DroolsTest
-
-# sistema-inteligente, desde pk_dsint/sistema-inteligente
 JAVA_HOME=$(/usr/libexec/java_home -v 1.8) mvn test exec:java
 ```
 
@@ -197,5 +172,5 @@ JAVA_HOME=$(/usr/libexec/java_home -v 1.8) mvn test exec:java
 | Eclipse 2020-12 **x86_64** con Rosetta 2 | No existe Eclipse 2020-12 para Apple Silicon. Se respeta la versión del profesor. |
 | Plugin instalado por terminal (p2 director) | Es exactamente la misma instalación (mismos dos componentes, mismo repositorio) sin pasos gráficos. El método gráfico del PDF sigue siendo válido. |
 | `slf4j-simple-1.7.26.jar` desde Maven Central | La distribución 7.74.1 no lo trae. |
-| `drools-prueba` creado con los ficheros del asistente, no con el asistente | Así queda versionado y cualquiera lo importa igual; el contenido es el mismo que genera el plugin. |
+| `drools-prueba` retirado del repositorio tras la prueba | Solo servía para comprobar la instalación; queda en el historial (commit `c18f0e3`). |
 | `sistema-inteligente` con Maven en lugar de la «Drools Library» | Versiones fijadas en `pom.xml` (todas 7.74.1) y se compila igual en Eclipse, en terminal y en el ordenador de cualquier compañero. |

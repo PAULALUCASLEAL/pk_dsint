@@ -31,11 +31,6 @@ El profesor desaconseja Drools anterior a 7.43 y Drools 8 o superior: **no actua
 pk_dsint/
 ├── ontologia/
 │   └── mitologia.owl            ontología (fase 1.a) — no se modifica en esta tarea
-├── drools-prueba/               proyecto de prueba del profesor (Hello World de Drools)
-│   ├── src/main/java/com/sample/DroolsTest.java
-│   ├── src/main/resources/com/sample/rules/Sample.drl
-│   ├── src/main/resources/META-INF/kmodule.xml
-│   └── lib/slf4j-simple-1.7.26.jar
 ├── sistema-inteligente/         proyecto real DSI_Mitologia (Maven, Drools 7.74.1, Java 8)
 │   ├── pom.xml
 │   └── src/
@@ -56,14 +51,11 @@ pk_dsint/
 3. Un JDK 8 registrado en Eclipse (Preferences → Java → Installed JREs).
 4. En Apple Silicon, Rosetta 2 instalado (`softwareupdate --install-rosetta`).
 
-## Cómo abrir los proyectos en Eclipse
+## Cómo abrir el proyecto en Eclipse
 
 Usa un workspace solo para DSINT (por ejemplo `~/DSINT/eclipse-workspace`).
 
-- **drools-prueba:** File → Import → General → *Existing Projects into Workspace* →
-  carpeta `pk_dsint/drools-prueba` → Finish (sin marcar «Copy projects into workspace»).
-- **sistema-inteligente:** File → Import → Maven → *Existing Maven Projects* →
-  carpeta `pk_dsint/sistema-inteligente` → Finish.
+File → Import → Maven → *Existing Maven Projects* → carpeta `pk_dsint/sistema-inteligente` → Finish.
 
 Si aparece «Marketplace solutions available», pulsa **Cancel** (lo indica el profesor).
 
@@ -73,21 +65,12 @@ Eclipse → Settings… (Window → Preferences en Windows) → Drools → **Ins
 Add… → Browse… → carpeta `drools-distribution-7.74.1.Final/binaries` → OK →
 marca el runtime (7.74.1) → **Apply and Close**.
 
-`drools-prueba` usa este runtime (la «Drools Library» del build path).
-`sistema-inteligente` no lo necesita: Maven descarga Drools 7.74.1 por su cuenta.
+El runtime lo usa el plugin de Eclipse (editor de `.drl`, proyectos Drools clásicos).
+`sistema-inteligente` no depende de él: Maven descarga Drools 7.74.1 por su cuenta.
 
 ## Cómo ejecutar y comprobar que funciona
 
-**drools-prueba** — botón derecho en `DroolsTest.java` → Run As → Java Application. Debe salir:
-
-```text
-Hello World
-Goodbye cruel world
-```
-
-(precedido de varias líneas `[main] INFO org.drools...`, que son el log de Drools).
-
-**sistema-inteligente** — botón derecho en `Principal.java` → Run As → Java Application, o en terminal:
+Botón derecho en `Principal.java` → Run As → Java Application, o en terminal:
 
 ```bash
 cd sistema-inteligente
@@ -106,12 +89,12 @@ Debe salir `Drools 7.74.1 funcionando: regla de prueba ejecutada` y `Tests run: 
 - **Ya hay otro Eclipse instalado** (`/Applications/Eclipse.app`, 2025-09). No se toca;
   el de DSINT vive aparte, en `~/DSINT/software/Eclipse.app`.
 - **La distribución de Drools no trae `slf4j-simple-1.7.26.jar`** (solo `slf4j-api-1.7.30.jar`).
-  Lo hemos incluido en `drools-prueba/lib/`, sacado de Maven Central.
+  En `sistema-inteligente` lo declaramos como dependencia Maven.
 
 ## Estado actual
 
 - [x] Ontología fase 1.a incluida (`ontologia/mitologia.owl`, sin cambios).
-- [x] Drools 7.74.1 + Java 8 probados: `drools-prueba` imprime `Hello World` / `Goodbye cruel world`.
+- [x] Drools 7.74.1 + Java 8 probados en Eclipse con el proyecto de ejemplo del profesor (`Hello World` / `Goodbye cruel world`). Ese proyecto ya no está en el repositorio; queda en el historial (commit `c18f0e3`).
 - [x] `sistema-inteligente` compila con Java 8 y pasa la prueba de integración.
 - [x] Modelo Java de hechos (paquetes `modelo`, `hechos`, `eventos`, `escenario`, `ontologia`, `motor`) con 26 pruebas JUnit — ver `documentacion/MODELO_JAVA.md`.
 - [ ] Reglas del mito de Perseo y Andrómeda (fase 1.b) — **no empezadas**.
